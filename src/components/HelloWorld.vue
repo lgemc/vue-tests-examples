@@ -1,6 +1,12 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <div>{{ currentUser }}</div>
+    <label for="#user-name">User Name</label>
+    <input id="user-name" v-model="currentUserName" type="string">
+     <label for="#user-name">User Country</label>
+    <input id="country"  v-model="currentUserCountry" type="string">
+    <button id='btn-set-user' @click="setUserInfo"> Set current user info</button>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -31,10 +37,26 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data: function() {
+    return {
+      currentUserName: '',
+      currentUserCountry: ''
+    } 
+  },
+  methods: {
+    ...mapMutations('accounts', ['addUser', 'setCurrentUser']),
+    setUserInfo() {
+      this.setCurrentUser({userName: this.currentUserName, country:this.currentUserCountry})
+    }
+  },
+  computed: {
+    ...mapState('accounts', ['users', 'currentUser'])
   }
 }
 </script>
